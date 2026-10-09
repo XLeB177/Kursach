@@ -12,7 +12,7 @@ load_dotenv(_ROOT / ".env")
 
 def get_connection_params(*, test: bool = False) -> dict:
     """Параметры подключения. test=True — база board_games_test."""
-    db_name_key = "DB_TEST_NAME" if test else "DB_NAME"
+    db_name_key = "TEST_DB_NAME" if test else "DB_NAME"
     return {
         "host": os.getenv("DB_HOST", "localhost"),
         "port": os.getenv("DB_PORT", "5432"),
@@ -25,6 +25,18 @@ def get_connection_params(*, test: bool = False) -> dict:
 def get_connection(*, test: bool = False):
     """Открыть соединение с рабочей или тестовой базой."""
     return psycopg2.connect(**get_connection_params(test=test))
+
+
+def execute_sql_file(path: str | Path, *, test: bool = False) -> None:
+    """Выполнить SQL-файл. Нужно для schema.sql / seed.sql."""
+    sql = Path(path).read_text(encoding="utf-8")
+    conn = get_connection(test=test)
+    conn.autocommit = True
+    try:
+        with conn.cursor() as cur:
+            cur.execute(sql)
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 .env
+AGENTS.md
 .venv/
 venv/
 __pycache__/
@@ -12,3 +13,6 @@ __pycache__/
 dist/
 build/
 *.log
+logs/
+assets/avatars/*
+!assets/avatars/.gitkeep
