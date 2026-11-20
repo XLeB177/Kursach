@@ -1,55 +1,40 @@
-"""Точка входа: пустое окно приложения, журнал и перехват ошибок."""
-
+"""Запуск приложения и обработка неожиданных ошибок."""
 import logging
 import sys
+import traceback
 from pathlib import Path
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMessageBox
 
-_ROOT = Path(__file__).resolve().parent
-_LOG_DIR = _ROOT / "logs"
-_LOG_DIR.mkdir(exist_ok=True)
+from ui.windows.shop import ShopWindow
 
-logging.basicConfig(
-    filename=_LOG_DIR / "app.log",
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    encoding="utf-8",
-)
-_logger = logging.getLogger("board_games_shop")
+LOG_DIR = Path(__file__).resolve().parent / "logs"
+logger = logging.getLogger("board_games_shop")
 
 
-def _show_error(message: str) -> None:
-    """Понятное окно вместо падения. Без traceback."""
-    box = QMessageBox()
-    box.setIcon(QMessageBox.Icon.Critical)
-    box.setWindowTitle("Ошибка")
-    box.setText("Произошла непредвиденная ошибка. Подробности записаны в журнал.")
-    box.setInformativeText(message)
-    box.exec()
-
-
-def handle_exception(exc_type, exc_value, exc_traceback) -> None:
-    """Глобальный перехват необработанных исключений."""
-    if issubclass(exc_type, KeyboardInterrupt):
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if not issubclass(exc_type, Exception):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    _logger.exception(
-        "Необработанное исключение",
-        exc_info=(exc_type, exc_value, exc_traceback),
+    frames = traceback.extract_tb(exc_traceback)
+    location = " → ".join(f"{Path(frame.filename).name}:{frame.lineno}" for frame in frames)
+    logger.error("%s (%s)", exc_type.__name__, location)
+    if QApplication.instance():
+        QMessageBox.critical(None, "Ошибка", "Произошла непредвиденная ошибка. Повторите действие.")
+
+
+def main():
+    LOG_DIR.mkdir(exist_ok=True)
+    logging.basicConfig(
+        filename=LOG_DIR / "app.log", level=logging.INFO, encoding="utf-8",
+        format="%(asctime)s [%(levelname)s] %(message)s",
     )
-    if QApplication.instance() is not None:
-        _show_error(str(exc_value) or "Неизвестная ошибка.")
-
-
-def main() -> None:
     sys.excepthook = handle_exception
     app = QApplication(sys.argv)
-    window = QMainWindow()
-    window.setWindowTitle("Магазин настольных игр")
-    window.resize(800, 600)
+    app.setStyle("Fusion")
+    window = ShopWindow()
     window.show()
-    _logger.info("Приложение запущено")
+    logger.info("Приложение запущено")
     sys.exit(app.exec())
 
 

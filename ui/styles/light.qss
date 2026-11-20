@@ -1,0 +1,17 @@
+QWidget { background: #f3f6f4; color: #202d28; }
+QFrame#sidebar, QFrame#sidebar QLabel { background: #193a31; color: #f1f7f4; }
+QFrame#sidebar QPushButton { background: #21483c; border: 1px solid #31574a; color: #f1f7f4; }
+QFrame#sidebar QPushButton:checked { background: #d1edda; border-color: #d1edda; color: #17392e; }
+QFrame#sidebar QPushButton:hover { border-color: #8fb8a8; }
+QFrame#banner, QFrame#banner QLabel { background: #d8e9df; }
+QFrame#gameCard, QFrame#gameCard QLabel { background: #ffffff; }
+QPushButton, QLineEdit, QSpinBox, QComboBox, QPlainTextEdit, QListWidget {
+    background: #ffffff; border: 1px solid #a5bbb0;
+}
+QPushButton:hover, QTabBar::tab:selected { background: #e2f1e8; }
+QPushButton:checked { background: #c4e4d1; border-color: #639880; }
+QPushButton[primary="true"] { background: #26614d; color: #ffffff; border-color: #26614d; }
+QPushButton[primary="true"]:hover { background: #33735d; }
+QPushButton:disabled { background: #e7ebe9; color: #6a7770; border-color: #c4cfca; }
+QHeaderView::section, QTabBar::tab { background: #e8eeeb; }
+QTableWidget { background: #ffffff; alternate-background-color: #edf4f0; selection-background-color: #cce5d5; selection-color: #17392e; }

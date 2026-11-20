@@ -14,6 +14,7 @@ def get_connection_params(*, test: bool = False) -> dict:
     """Параметры подключения. test=True — база board_games_test."""
     db_name_key = "TEST_DB_NAME" if test else "DB_NAME"
     return {
+        "connect_timeout": 4,
         "host": os.getenv("DB_HOST", "localhost"),
         "port": os.getenv("DB_PORT", "5432"),
         "dbname": os.getenv(db_name_key, "board_games_test" if test else "board_games"),

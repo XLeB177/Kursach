@@ -16,7 +16,7 @@ TABLES = (
 )
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def _prepare_test_db():
     """Проверяет, что тесты идут на тестовой базе, и создаёт таблицы."""
     conn = get_connection(test=True)
@@ -33,7 +33,7 @@ def _prepare_test_db():
 
 
 @pytest.fixture
-def db():
+def db(_prepare_test_db):
     """Соединение с чистой тестовой базой (все таблицы пусты)."""
     conn = get_connection(test=True)
     with conn.cursor() as cur:

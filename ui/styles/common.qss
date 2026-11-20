@@ -1,0 +1,14 @@
+QWidget { font-size: 14px; }
+QLabel#heading { font-size: 26px; font-weight: 700; }
+QLabel#subheading { font-size: 17px; font-weight: 600; }
+QLabel#brand { font-size: 19px; font-weight: 700; }
+QFrame#authPanel, QFrame#gameCard, QFrame#banner { border-radius: 12px; }
+QPushButton, QLineEdit, QSpinBox, QComboBox, QPlainTextEdit, QListWidget {
+    border-radius: 6px; min-height: 22px; padding: 5px 8px;
+}
+QPushButton { padding-left: 10px; padding-right: 10px; }
+QPushButton[primary="true"] { font-weight: 600; }
+QFrame#sidebar QPushButton { text-align: left; min-height: 27px; }
+QTableWidget { border-radius: 7px; gridline-color: transparent; }
+QHeaderView::section { padding: 8px; border: none; font-weight: 600; }
+QTabBar::tab { padding: 7px 13px; margin-right: 3px; border-radius: 6px; }

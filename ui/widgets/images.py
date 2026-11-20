@@ -4,7 +4,7 @@ from pathlib import Path
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QFont, QPainter, QPixmap
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QApplication, QLabel
 
 _ROOT = Path(__file__).resolve().parent.parent.parent
 LOGO_RELATIVE = "assets/logo.png"
@@ -39,7 +39,8 @@ def set_logo_on_label(label: QLabel) -> None:
         label.setText("Магазин настольных игр")
         return
     label.setText("")
-    label.setPixmap(pixmap)
+    label.setPixmap(pixmap.scaled(178, 66, Qt.AspectRatioMode.KeepAspectRatio,
+                                  Qt.TransformationMode.SmoothTransformation))
 
 
 def product_placeholder(size: int = 160) -> QPixmap:
@@ -48,7 +49,7 @@ def product_placeholder(size: int = 160) -> QPixmap:
     pixmap.fill(QColor("#B0B0B0"))
     painter = QPainter(pixmap)
     painter.setPen(QColor("#333333"))
-    painter.setFont(QFont("Segoe UI", max(10, size // 12)))
+    painter.setFont(QFont(QApplication.font().family(), max(10, size // 12)))
     painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "Нет фото")
     painter.end()
     return pixmap
@@ -65,7 +66,7 @@ def avatar_placeholder(name: str, size: int = 64) -> QPixmap:
     painter.setPen(Qt.PenStyle.NoPen)
     painter.drawEllipse(0, 0, size - 1, size - 1)
     painter.setPen(QColor("#FFFFFF"))
-    painter.setFont(QFont("Segoe UI", max(10, size // 2), QFont.Weight.Bold))
+    painter.setFont(QFont(QApplication.font().family(), max(10, size // 2), QFont.Weight.Bold))
     painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, letter)
     painter.end()
     return pixmap
